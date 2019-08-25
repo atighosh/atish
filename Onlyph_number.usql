@@ -1,0 +1,14 @@
+﻿/*  Display only phone number */
+@employees =
+    EXTRACT Emp_Name string,
+            Phone_number string
+    FROM "/inputdata/employeephone.txt"
+    USING Extractors.Text();
+
+@phone_number =
+    SELECT Emp_Name,Phone_number.Substring(Phone_number.IndexOf(":")+1,(Phone_number.Length-1)-(Phone_number.IndexOf(":"))) AS Only_number
+                     FROM @employees;
+
+OUTPUT @phone_number 
+TO "/output/Employee/Only_ph_number.txt"
+USING Outputters.Text(outputHeader : true);

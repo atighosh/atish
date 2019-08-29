@@ -1,0 +1,43 @@
+﻿@row1 =
+    EXTRACT id int?,
+            Name string,
+            Sex string,
+            Age int?,
+            Height int?,
+            Weight int?,
+            Team string,
+            Noc string,
+            Games string,
+            Year int?,
+            Season string,
+            City string,
+            Sport string,
+            Event string,
+            Medal string
+    FROM "/inputdata/Olympic_DataSet.csv"
+    USING Extractors.Csv(skipFirstNRows : 1, silent: true);
+
+@row2 =
+    SELECT  id,
+            Name,
+            Sex,
+            Age,
+            Height,
+            Weight,
+            (Team.IndexOf('-') == -1) ? Team : Team.Substring(0,(Team.IndexOf('-'))) AS modified_team,
+            Noc,
+            Games,
+            Year,
+            Season, 
+            City,
+            Sport,
+            Event,
+            Medal  
+    FROM @row1;
+
+OUTPUT @row2 
+TO "/output/Employee/modified.csv"
+USING Outputters.Csv(outputHeader : true);
+
+    
+            
